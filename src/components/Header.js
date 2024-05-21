@@ -42,9 +42,18 @@ export default function Header({ token, setToken }) {
     localStorage.setItem("token", json.token);
   };
 
+  const onLogoutClickHandler = () => {
+    localStorage.removeItem("token");
+    setToken(undefined);
+  };
+
   return (
     <header>
-      {token && <div>로그인이 완료되었습니다.</div>}
+      {token && (
+        <div>
+          <span onClick={onLogoutClickHandler}>로그아웃</span>
+        </div>
+      )}
       {!token && (
         <div>
           <label htmlFor="email">EMAIL</label>

@@ -1,34 +1,16 @@
 import { useState } from "react";
 import Header from "./components/Header.js";
+import BoardApp from "./components/BoardApp.js";
 
 export default function App() {
   const [token, setToken] = useState();
 
-  const [boards, setBoards] = useState([]);
-
-  // 게시글 불러오기
-  const loadBoards = async () => {
-    if (!token) {
-      return;
-    }
-
-    const response = await fetch("http://localhost:8080/api/v1/boards", {
-      method: "GET",
-      headers: {
-        Authorization: token,
-      },
-    });
-
-    const json = await response.json();
-    console.log(json);
-    setBoards(json);
-  };
-  loadBoards();
-
   return (
     <div className="main-container">
       <Header token={token} setToken={setToken} />
-      <div>게시글 목록</div>
+      <main>
+        <BoardApp token={token} />
+      </main>
       <div>게시글 등록</div>
     </div>
   );
