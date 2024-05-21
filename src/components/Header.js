@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 
-export default function Header({ token, setToken }) {
+export default function Header({ token, setToken, myInfo }) {
   const emailRef = useRef();
   const passwordRef = useRef();
 
@@ -51,6 +51,11 @@ export default function Header({ token, setToken }) {
     <header>
       {token && (
         <div>
+          {myInfo && (
+            <div>
+              {myInfo.name} ({myInfo.email})
+            </div>
+          )}
           <span onClick={onLogoutClickHandler}>로그아웃</span>
         </div>
       )}

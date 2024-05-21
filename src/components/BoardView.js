@@ -29,6 +29,7 @@ export default function BoardView({
       // 삭제 실패!!
       // 실패한 사유를 알려줘야한다.
       console.log(json);
+      alert(json.errors);
     }
   };
 

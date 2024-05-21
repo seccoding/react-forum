@@ -1,13 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/Header.js";
 import BoardApp from "./components/BoardApp.js";
 
 export default function App() {
   const [token, setToken] = useState();
+  const [myInfo, setMyInfo] = useState();
+
+  useEffect(() => {
+    const loadMyInfo = async () => {
+      if (!token) {
+        setMyInfo(undefined);
+        return;
+      }
+
+      const response = await fetch("http://localhost:8080/api/v1/member", {
+        method: "GET",
+        headers: {
+          Authorization: token,
+        },
+      });
+
+      const json = await response.json();
+      setMyInfo(json.body);
+    };
+    loadMyInfo();
+  }, [token]);
 
   return (
     <div className="main-container">
-      <Header token={token} setToken={setToken} />
+      <Header token={token} setToken={setToken} myInfo={myInfo} />
       <main>
         <BoardApp token={token} />
       </main>
