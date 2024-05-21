@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import UpdateBoardForm from "./UpdateBoardForm";
 
 export default function BoardView({
   token,
@@ -8,8 +9,12 @@ export default function BoardView({
   setNeedReload,
 }) {
   const [boardItem, setBoardItem] = useState();
+  const [isUpdateMode, setIsUpdateMode] = useState(false);
+  const [needReloadDetail, setNeedReloadDetail] = useState();
 
-  const onModifyClickHandler = () => {};
+  const onModifyClickHandler = () => {
+    setIsUpdateMode(true);
+  };
 
   const onDeleteClickHandler = async () => {
     const response = await fetch(
@@ -51,12 +56,12 @@ export default function BoardView({
       setBoardItem(json.body);
     };
     loadBoard();
-  }, [token, selectedBoardId]);
+  }, [token, selectedBoardId, needReloadDetail]);
 
   return (
     <div>
       {!boardItem && <div>데이터를 불러오는 중입니다.</div>}
-      {boardItem && (
+      {boardItem && !isUpdateMode && (
         <div>
           <h3>{boardItem.subject}</h3>
           <div>
@@ -73,8 +78,19 @@ export default function BoardView({
           </div>
         </div>
       )}
+
+      {isUpdateMode && (
+        <UpdateBoardForm
+          boardItem={boardItem}
+          token={token}
+          setIsUpdateMode={setIsUpdateMode}
+          setNeedReload={setNeedReload}
+          setNeedReloadDetail={setNeedReloadDetail}
+        />
+      )}
       <div className="button-area right-align">
-        {myInfo &&
+        {!isUpdateMode &&
+          myInfo &&
           boardItem &&
           (myInfo.email === boardItem.email || myInfo.adminYn === "Y") && (
             <>
@@ -82,7 +98,9 @@ export default function BoardView({
               <button onClick={onDeleteClickHandler}>삭제</button>
             </>
           )}
-        <button onClick={onViewListClickHandler}>목록보기</button>
+        {!isUpdateMode && (
+          <button onClick={onViewListClickHandler}>목록보기</button>
+        )}
       </div>
     </div>
   );

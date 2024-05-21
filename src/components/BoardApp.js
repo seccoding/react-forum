@@ -86,7 +86,7 @@ export default function BoardApp({ token, myInfo }) {
         />
       )}
       {!token && <div>로그인이 필요합니다.</div>}
-      {token && (
+      {token && !isWriteMode && (
         <div className="button-area right-align">
           <button onClick={onWriteModeClickHandler}>게시글 등록</button>
         </div>
