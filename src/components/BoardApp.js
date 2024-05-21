@@ -4,6 +4,9 @@ import BoardView from "./BoardView";
 export default function BoardApp({ token }) {
   const [boards, setBoards] = useState([]);
   const [selectedBoardId, setSelectedBoardId] = useState();
+
+  const [needReload, setNeedReload] = useState();
+
   const isSelect = selectedBoardId !== undefined;
 
   // 게시글 불러오기
@@ -26,7 +29,7 @@ export default function BoardApp({ token }) {
       setBoards(json.body);
     };
     loadBoards();
-  }, [token]);
+  }, [token, needReload]);
 
   const onRowClickHandler = (rowId) => {
     setSelectedBoardId(rowId);
@@ -66,6 +69,7 @@ export default function BoardApp({ token }) {
           token={token}
           selectedBoardId={selectedBoardId}
           setSelectedBoardId={setSelectedBoardId}
+          setNeedReload={setNeedReload}
         />
       )}
       {!token && <div>로그인이 필요합니다.</div>}
