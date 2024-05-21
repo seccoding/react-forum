@@ -36,7 +36,12 @@ export default function Header({ token, setToken, myInfo }) {
     });
 
     const json = await response.json();
-    setToken(json.token);
+    if (json.message) {
+      alert(json.message);
+      return;
+    } else if (json.token) {
+      setToken(json.token);
+    }
 
     // token의 값을 브라우저의 로컬 스토리지에 작성한다.
     localStorage.setItem("token", json.token);

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import BoardView from "./BoardView";
+import WriteBoardForm from "./WriteBoardForm";
 
-export default function BoardApp({ token }) {
+export default function BoardApp({ token, myInfo }) {
   const [boards, setBoards] = useState([]);
   const [selectedBoardId, setSelectedBoardId] = useState();
-
+  const [isWriteMode, setIsWriteMode] = useState(false);
   const [needReload, setNeedReload] = useState();
 
   const isSelect = selectedBoardId !== undefined;
@@ -35,9 +36,13 @@ export default function BoardApp({ token }) {
     setSelectedBoardId(rowId);
   };
 
+  const onWriteModeClickHandler = () => {
+    setIsWriteMode(true);
+  };
+
   return (
     <>
-      {token && !isSelect && (
+      {token && !isSelect && !isWriteMode && (
         <table>
           <thead>
             <tr>
@@ -64,15 +69,28 @@ export default function BoardApp({ token }) {
           </tbody>
         </table>
       )}
-      {token && isSelect && (
+      {token && isSelect && !isWriteMode && (
         <BoardView
+          myInfo={myInfo}
           token={token}
           selectedBoardId={selectedBoardId}
           setSelectedBoardId={setSelectedBoardId}
           setNeedReload={setNeedReload}
         />
       )}
+      {isWriteMode && (
+        <WriteBoardForm
+          token={token}
+          setIsWriteMode={setIsWriteMode}
+          setNeedReload={setNeedReload}
+        />
+      )}
       {!token && <div>로그인이 필요합니다.</div>}
+      {token && (
+        <div className="button-area right-align">
+          <button onClick={onWriteModeClickHandler}>게시글 등록</button>
+        </div>
+      )}
     </>
   );
 }

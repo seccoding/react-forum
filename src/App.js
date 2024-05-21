@@ -30,9 +30,8 @@ export default function App() {
     <div className="main-container">
       <Header token={token} setToken={setToken} myInfo={myInfo} />
       <main>
-        <BoardApp token={token} />
+        <BoardApp token={token} myInfo={myInfo} />
       </main>
-      <div>게시글 등록</div>
     </div>
   );
 }

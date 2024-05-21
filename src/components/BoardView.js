@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 
 export default function BoardView({
   token,
+  myInfo,
   selectedBoardId,
   setSelectedBoardId,
   setNeedReload,
 }) {
   const [boardItem, setBoardItem] = useState();
+
+  const onModifyClickHandler = () => {};
 
   const onDeleteClickHandler = async () => {
     const response = await fetch(
@@ -71,7 +74,14 @@ export default function BoardView({
         </div>
       )}
       <div className="button-area right-align">
-        <button onClick={onDeleteClickHandler}>삭제</button>
+        {myInfo &&
+          boardItem &&
+          (myInfo.email === boardItem.email || myInfo.adminYn === "Y") && (
+            <>
+              <button onClick={onModifyClickHandler}>수정</button>
+              <button onClick={onDeleteClickHandler}>삭제</button>
+            </>
+          )}
         <button onClick={onViewListClickHandler}>목록보기</button>
       </div>
     </div>
