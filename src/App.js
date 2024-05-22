@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import Header from "./components/Header.js";
 import BoardApp from "./components/BoardApp.js";
 import { loadMyData } from "./http/http.js";
+import { useTimeout } from "./hooks/timeout.js";
 
 export default function App() {
   const [token, setToken] = useState();
   const [myInfo, setMyInfo] = useState();
+
+  const { data, isLoading } = useTimeout();
 
   useEffect(() => {
     const loadMyInfo = async () => {
@@ -22,6 +25,8 @@ export default function App() {
 
   return (
     <div className="main-container">
+      {isLoading ? <div>데이터를 불러오는 중입니다.</div> : <div>{data}</div>}
+
       <Header token={token} setToken={setToken} myInfo={myInfo} />
       <main>
         <BoardApp token={token} myInfo={myInfo} />
