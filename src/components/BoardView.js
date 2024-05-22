@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import UpdateBoardForm from "./UpdateBoardForm";
+import { deleteOneBoard, loadOneBoard } from "../http/http";
 
 export default function BoardView({
   token,
@@ -17,17 +18,7 @@ export default function BoardView({
   };
 
   const onDeleteClickHandler = async () => {
-    const response = await fetch(
-      `http://localhost:8080/api/v1/boards/${boardItem.id}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: token,
-        },
-      }
-    );
-
-    const json = await response.json();
+    const json = await deleteOneBoard(boardItem.id, token);
     if (json.body) {
       // 삭제 성공!
       // 목록 컴포넌트를 노출.
@@ -47,12 +38,7 @@ export default function BoardView({
 
   useEffect(() => {
     const loadBoard = async () => {
-      const response = await fetch(
-        `http://localhost:8080/api/v1/boards/${selectedBoardId}`,
-        { method: "GET", headers: { Authorization: token } }
-      );
-
-      const json = await response.json();
+      const json = await loadOneBoard(selectedBoardId, token);
       setBoardItem(json.body);
     };
     loadBoard();

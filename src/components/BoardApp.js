@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import BoardView from "./BoardView";
 import WriteBoardForm from "./WriteBoardForm";
+import { loadAllBoards } from "../http/http";
 
 export default function BoardApp({ token, myInfo }) {
   const [boards, setBoards] = useState([]);
@@ -18,14 +19,7 @@ export default function BoardApp({ token, myInfo }) {
         return;
       }
 
-      const response = await fetch("http://localhost:8080/api/v1/boards", {
-        method: "GET",
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      const json = await response.json();
+      const json = await loadAllBoards(token);
       console.log(json);
       setBoards(json.body);
     };

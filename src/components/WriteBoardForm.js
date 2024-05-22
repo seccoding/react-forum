@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { createNewBoard } from "../http/http";
 
 export default function WriteBoardForm({
   token,
@@ -18,20 +19,7 @@ export default function WriteBoardForm({
     const content = contentRef.current.value;
     const file = fileRef.current.files[0];
 
-    // 파일 업로드를 위해 formData 생성
-    const formData = new FormData(); // Javascript built-in 객체.
-    formData.append("subject", subject);
-    formData.append("content", content);
-    formData.append("file", file);
-
-    const response = await fetch("http://localhost:8080/api/v1/boards", {
-      method: "POST",
-      headers: {
-        Authorization: token,
-      },
-      body: formData,
-    });
-    const json = await response.json();
+    const json = await createNewBoard(subject, content, file, token);
     console.log(json);
 
     if (json.errors) {

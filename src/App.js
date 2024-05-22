@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "./components/Header.js";
 import BoardApp from "./components/BoardApp.js";
+import { loadMyData } from "./http/http.js";
 
 export default function App() {
   const [token, setToken] = useState();
@@ -13,14 +14,7 @@ export default function App() {
         return;
       }
 
-      const response = await fetch("http://localhost:8080/api/v1/member", {
-        method: "GET",
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      const json = await response.json();
+      const json = await loadMyData(token);
       setMyInfo(json.body);
     };
     loadMyInfo();

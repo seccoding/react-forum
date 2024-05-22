@@ -1,4 +1,5 @@
 import { useRef, useEffect } from "react";
+import { login } from "../http/http";
 
 export default function Header({ token, setToken, myInfo }) {
   const emailRef = useRef();
@@ -29,13 +30,8 @@ export default function Header({ token, setToken, myInfo }) {
       return;
     }
 
-    const response = await fetch("http://localhost:8080/auth/token", {
-      method: "POST",
-      body: JSON.stringify({ email, password }),
-      headers: { "Content-Type": "application/json" },
-    });
+    const json = await login(email, password);
 
-    const json = await response.json();
     if (json.message) {
       alert(json.message);
       return;
