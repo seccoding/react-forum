@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import UpdateBoardForm from "./UpdateBoardForm";
 import { deleteOneBoard, loadOneBoard } from "../http/http";
+import { useFetch } from "../hooks/useFetch";
 
 export default function BoardView({
   token,
@@ -9,7 +10,6 @@ export default function BoardView({
   setSelectedBoardId,
   setNeedReload,
 }) {
-  const [boardItem, setBoardItem] = useState();
   const [isUpdateMode, setIsUpdateMode] = useState(false);
   const [needReloadDetail, setNeedReloadDetail] = useState();
 
@@ -36,17 +36,21 @@ export default function BoardView({
     setSelectedBoardId(undefined);
   };
 
-  useEffect(() => {
-    const loadBoard = async () => {
-      const json = await loadOneBoard(selectedBoardId, token);
-      setBoardItem(json.body);
-    };
-    loadBoard();
-  }, [token, selectedBoardId, needReloadDetail]);
+  const fetchLoadOneBoard = useCallback(loadOneBoard, []);
+  const fetchParam = useMemo(() => {
+    return { selectedBoardId, token };
+  }, [selectedBoardId, token]);
+
+  const { data, isLoading } = useFetch(
+    undefined,
+    fetchLoadOneBoard,
+    fetchParam
+  );
+  const { body: boardItem } = data || {};
 
   return (
     <div>
-      {!boardItem && <div>데이터를 불러오는 중입니다.</div>}
+      {isLoading && <div>데이터를 불러오는 중입니다.</div>}
       {boardItem && !isUpdateMode && (
         <div>
           <h3>{boardItem.subject}</h3>

@@ -1,8 +1,8 @@
-export const loadMyData = async (token) => {
+export const loadMyData = async ({ token }) => {
   const response = await fetch("http://localhost:8080/api/v1/member", {
     method: "GET",
     headers: {
-      Authorization: token,
+      Authorization: token, // [object Object]
     },
   });
 
@@ -21,13 +21,20 @@ export const login = async (email, password) => {
   return json;
 };
 
-export const loadAllBoards = async (token) => {
-  const response = await fetch("http://localhost:8080/api/v1/boards", {
-    method: "GET",
-    headers: {
-      Authorization: token,
-    },
-  });
+export const loadAllBoards = async ({ token, pageNo = 0 }) => {
+  if (!token) {
+    return undefined;
+  }
+
+  const response = await fetch(
+    `http://localhost:8080/api/v1/boards?pageNo=${pageNo}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
 
   const json = await response.json();
   return json;
@@ -48,7 +55,7 @@ export const deleteOneBoard = async (boardId, token) => {
   return json;
 };
 
-export const loadOneBoard = async (selectedBoardId, token) => {
+export const loadOneBoard = async ({ selectedBoardId, token }) => {
   const response = await fetch(
     `http://localhost:8080/api/v1/boards/${selectedBoardId}`,
     { method: "GET", headers: { Authorization: token } }
